@@ -1,24 +1,13 @@
 <template>
     <div>
-        <vk-button v-if="!loading" class="uuk-margin-right" v-on:click="storageUpdate" >Yenile <vk-icon icon="future" class="uk-margin-small-left"></vk-icon> </vk-button>
-        <vk-button v-if="loading" type="danger" >Yenilemeyi İptal Et</vk-button>
-
         <div >
             <h2 v-if="info" class="uk-heading-divider uk-margin-top">Tüm Kitaplar</h2>
 
-            <div v-if="!loading && errorMessage" >
-                <p class="uk-alert-danger uk-margin-small-top uk-padding-small uk-display-inline-block">{{errorMessageText}}</p>
-            </div>
-
-            <div v-if="loading">
-                Loading...
-            </div>
             <ul v-if="info" >
                 <li v-for="item in info" :key="item.title">
                     <span class="w-100"> <b class="label">Id:</b> {{ item.id }} </span>
                     <span class="w-100"> <b class="label">Başlık:</b> {{ item.title }} </span>
                     <span class="w-100"> <b class="label">Açıklama:</b> {{ item.description}} </span>
-                    <!--<span v-if="item.photo" class="w-100"> Photo URL: {{ item.photo}} </span>-->
                 </li>
             </ul>
             <h2 class="uk-heading-divider uk-margin-top"></h2>
@@ -85,8 +74,8 @@
     export default {
         name: "Books",
         data() {
+            /*@todo: code refactor for unnecessary variables*/
             return {
-                loading: false,
                 info: [
                     { "id": 1 , "title": "book 1", "description": "book 1 description"  },
                     { "id": 2 , "title": "book 2", "description": "book 2 description"  },
@@ -98,9 +87,6 @@
                 bookIdChange: '',
                 bookDescription: '',
                 bookDescriptionChange: '',
-                errorMessage: '',
-                errorMessageText: 'Kitaplar yüklenirken hata oluştu.',
-                errorPostMessageText: 'Kitaplar eklenirken hata oluştu.',
                 delete: '',
             }
         },
