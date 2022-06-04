@@ -1,6 +1,6 @@
 <template>
     <div>
-        <vk-button v-if="!loading" class="uuk-margin-right" v-on:click="getBooks" >Yenile <vk-icon icon="future" class="uk-margin-small-left"></vk-icon> </vk-button>
+        <vk-button v-if="!loading" class="uuk-margin-right" v-on:click="storageUpdate" >Yenile <vk-icon icon="future" class="uk-margin-small-left"></vk-icon> </vk-button>
         <vk-button v-if="loading" type="danger" >Yenilemeyi İptal Et</vk-button>
 
         <div >
@@ -16,8 +16,8 @@
             <ul v-if="info" >
                 <li v-for="item in info" :key="item.title">
                     <span class="w-100"> <b class="label">Id:</b> {{ item.id }} </span>
-                    <span class="w-100"> <b class="label">Title:</b> {{ item.title }} </span>
-                    <span class="w-100"> <b class="label">Description:</b> {{ item.description}} </span>
+                    <span class="w-100"> <b class="label">Başlık:</b> {{ item.title }} </span>
+                    <span class="w-100"> <b class="label">Açıklama:</b> {{ item.description}} </span>
                     <!--<span v-if="item.photo" class="w-100"> Photo URL: {{ item.photo}} </span>-->
                 </li>
             </ul>
@@ -105,42 +105,69 @@
             }
         },
         mounted() {
-            store.set('books', this.info);
+            this.storageUpdate();
         },
         created: function () {},
         methods: {
-            getBooks: function () {
-
+            storageUpdate: function () {
+                store.set('books', this.info);
             },
             postBook: function ( bookName, bookDescription ) {
-                this.info.push({
-                    "id": this.info[this.info.length - 1].id+1,
-                    "title": bookName,
-                    "description": bookDescription,
-                });
-                store.set('books', this.info);
+                if(bookName.length == 0 || bookDescription.length == 0){
+                    alert('Please fill all fields')
+                } else {
+                    this.info.push({
+                        "id": this.info[this.info.length - 1].id+1,
+                        "title": bookName,
+                        "description": bookDescription,
+                    });
+                    this.bookName = '';
+                    this.bookDescription = '';
+                    this.storageUpdate();
+                }
             },
             putBook: function (bookIdChange, bookNameChange, bookDescriptionChange) {
                 this.info.map((value) => {
                     if(bookIdChange == value.id){
+                        if(bookNameChange || bookDescriptionChange){
+                            this.bookIdChange = '';
+                            alert(`${bookIdChange} changed`)
+                        }
                         if(bookNameChange){
                             value.title = bookNameChange;
+                            this.bookNameChange = '';
                         }
                         if(bookDescriptionChange) {
                             value.description = bookDescriptionChange;
+                            this.bookDescriptionChange = '';
                         }
                     }
                 })
             },
             deleteBook: function (bookIdDelete) {
-                //const params = new URLSearchParams();
-               /* axios
-                    .delete( this.apiUrl + '/' + bookIdDelete + '?api_token='+ this.token +'&' )
-                    //.then(response => (this.delete = response, this.errorMessage = '' ))
-                    .catch(
-                        //THIS IS DELETE ERROR this.errorPostMessage = true,
-                    )
-                    .finally(() => this.loading = false, this.getBooks() )*/
+                let found = false;
+                // sure pop up
+                if (confirm(`Are you sure want to remove item ? ${bookIdDelete}`)) {
+                    // if select true
+                    this.info.map((value,index) => {
+                        // try find
+                        // if find - remove
+                        if(bookIdDelete == value.id){
+                            this.info.splice(index, 1)
+                            // else not found alert error
+                            found = true
+                        }
+                    })
+
+                    if(!found){
+                        alert(`Not found id: ${bookIdDelete}`)
+                    } else{
+                        alert(`Removed id: ${bookIdDelete}`)
+                        this.storageUpdate();
+                        this.bookIdDelete = '';
+                    }
+                }
+
             },
             formSubmit: function(e){
                 e.preventDefault(e);
