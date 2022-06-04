@@ -80,14 +80,18 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import store from "storejs";
 
     export default {
         name: "Books",
         data() {
             return {
-                loading: true,
-                info: null,
+                loading: false,
+                info: [
+                    { "id": 1 , "title": "book 1", "description": "book 1 description"  },
+                    { "id": 2 , "title": "book 2", "description": "book 2 description"  },
+                    { "id": 3 , "title": "book 3", "description": "book 3 description"  },
+                ],
                 bookName: '',
                 bookNameChange: '',
                 bookIdDelete: '',
@@ -98,66 +102,45 @@
                 errorMessageText: 'Kitaplar yüklenirken hata oluştu.',
                 errorPostMessageText: 'Kitaplar eklenirken hata oluştu.',
                 delete: '',
-                apiUrl: 'http://data-api.loc/api/books',
-                //apiUrl: 'https://nasilkullanirim.com/api/books',
-                //token: 'token1'
-                token: 'asdfg'
             }
         },
         mounted() {
-            this.getBooks();
+            store.set('books', this.info);
         },
         created: function () {},
         methods: {
             getBooks: function () {
-                axios
-                    //.get( 'http://dataapi.test/api/books?api_token=token1&' )
-                    .get( this.apiUrl + '?api_token='+ this.token +'&' )
-                    .then(response => (this.info = response.data.data, self.errorMessage = '' ))
-                    .catch(
-                        function () {
-                            //console.log('test get error'),
-                            //console.log(error),
-                            self.errorMessage = true;
-                        }
-                    )
-                    .finally(() => this.loading = false)
+
             },
             postBook: function ( bookName, bookDescription ) {
-                const params = new URLSearchParams();
-                params.append('title', bookName);
-                params.append('description', bookDescription);
-                axios
-                    .post(this.apiUrl + '?api_token=' + this.token + '&', params )
-                    .then(response => (this.info = response.data.data, self.errorMessage = '' ))
-                    .catch(
-                        self.errorPostMessage = true,
-                    )
-                    .finally(() => this.loading = false, /*this.getBooks()*/ )
+                this.info.push({
+                    "id": this.info[this.info.length - 1].id+1,
+                    "title": bookName,
+                    "description": bookDescription,
+                });
+                store.set('books', this.info);
             },
             putBook: function (bookIdChange, bookNameChange, bookDescriptionChange) {
-                const params = new URLSearchParams();
-
-                params.append('title', bookNameChange);
-                params.append('description', bookDescriptionChange);
-                axios
-                    //.put(url:)
-                    .put(this.apiUrl + '/' + bookIdChange + '?api_token='+ this.token +'&' , params )
-                    //.then(response => (this.info = response.data.data, this.errorMessage = '' ))
-                    .catch(
-                        //THIS IS PUT ERROR this.errorPostMessage = true,
-                    )
-                    .finally(() => this.loading = false, this.getBooks())
+                this.info.map((value) => {
+                    if(bookIdChange == value.id){
+                        if(bookNameChange){
+                            value.title = bookNameChange;
+                        }
+                        if(bookDescriptionChange) {
+                            value.description = bookDescriptionChange;
+                        }
+                    }
+                })
             },
             deleteBook: function (bookIdDelete) {
                 //const params = new URLSearchParams();
-                axios
+               /* axios
                     .delete( this.apiUrl + '/' + bookIdDelete + '?api_token='+ this.token +'&' )
                     //.then(response => (this.delete = response, this.errorMessage = '' ))
                     .catch(
                         //THIS IS DELETE ERROR this.errorPostMessage = true,
                     )
-                    .finally(() => this.loading = false, this.getBooks() )
+                    .finally(() => this.loading = false, this.getBooks() )*/
             },
             formSubmit: function(e){
                 e.preventDefault(e);
