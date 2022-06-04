@@ -132,15 +132,10 @@
             },
             deleteBook: function (bookIdDelete) {
                 let found = false;
-                // sure pop up
                 if (confirm(`Are you sure want to remove item ? ${bookIdDelete}`)) {
-                    // if select true
                     this.info.map((value,index) => {
-                        // try find
-                        // if find - remove
                         if(bookIdDelete == value.id){
                             this.info.splice(index, 1)
-                            // else not found alert error
                             found = true
                         }
                     })
