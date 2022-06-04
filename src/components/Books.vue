@@ -3,7 +3,6 @@
         <vk-button v-if="!loading" class="uuk-margin-right" v-on:click="getBooks" >Yenile <vk-icon icon="future" class="uk-margin-small-left"></vk-icon> </vk-button>
         <vk-button v-if="loading" type="danger" >Yenilemeyi İptal Et</vk-button>
 
-
         <div >
             <h2 v-if="info" class="uk-heading-divider uk-margin-top">Tüm Kitaplar</h2>
 
@@ -83,8 +82,6 @@
 <script>
     import axios from 'axios';
 
-    let apiToken = 'token1';
-
     export default {
         name: "Books",
         data() {
@@ -97,10 +94,14 @@
                 bookIdChange: '',
                 bookDescription: '',
                 bookDescriptionChange: '',
+                errorMessage: '',
                 errorMessageText: 'Kitaplar yüklenirken hata oluştu.',
                 errorPostMessageText: 'Kitaplar eklenirken hata oluştu.',
                 delete: '',
-                apiUrl: 'http://book-library-api.test/api/books',
+                apiUrl: 'http://data-api.loc/api/books',
+                //apiUrl: 'https://nasilkullanirim.com/api/books',
+                //token: 'token1'
+                token: 'asdfg'
             }
         },
         mounted() {
@@ -110,13 +111,14 @@
         methods: {
             getBooks: function () {
                 axios
-                    .get( this.apiUrl + '?api_token='+apiToken+'' )
-                    .then(response => (this.info = response.data.data, this.errorMessage = '' ))
+                    //.get( 'http://dataapi.test/api/books?api_token=token1&' )
+                    .get( this.apiUrl + '?api_token='+ this.token +'&' )
+                    .then(response => (this.info = response.data.data, self.errorMessage = '' ))
                     .catch(
-                        function (error) {
-                            console.log('test get error'),
-                            console.log(error),
-                            this.errorMessage = true
+                        function () {
+                            //console.log('test get error'),
+                            //console.log(error),
+                            self.errorMessage = true;
                         }
                     )
                     .finally(() => this.loading = false)
@@ -126,8 +128,8 @@
                 params.append('title', bookName);
                 params.append('description', bookDescription);
                 axios
-                    .post(this.apiUrl + '?api_token='+apiToken+'&' , params )
-                    .then(response => (this.info = response.data.data, this.errorMessage = '' ))
+                    .post(this.apiUrl + '?api_token=' + this.token + '&', params )
+                    .then(response => (this.info = response.data.data, self.errorMessage = '' ))
                     .catch(
                         self.errorPostMessage = true,
                     )
@@ -140,7 +142,7 @@
                 params.append('description', bookDescriptionChange);
                 axios
                     //.put(url:)
-                    .put(this.apiUrl + '/' + bookIdChange + '?api_token='+apiToken+'&' , params )
+                    .put(this.apiUrl + '/' + bookIdChange + '?api_token='+ this.token +'&' , params )
                     //.then(response => (this.info = response.data.data, this.errorMessage = '' ))
                     .catch(
                         //THIS IS PUT ERROR this.errorPostMessage = true,
@@ -148,9 +150,9 @@
                     .finally(() => this.loading = false, this.getBooks())
             },
             deleteBook: function (bookIdDelete) {
-                const params = new URLSearchParams();
+                //const params = new URLSearchParams();
                 axios
-                    .delete( this.apiUrl + '/' + bookIdDelete + '?api_token='+apiToken+'&' )
+                    .delete( this.apiUrl + '/' + bookIdDelete + '?api_token='+ this.token +'&' )
                     //.then(response => (this.delete = response, this.errorMessage = '' ))
                     .catch(
                         //THIS IS DELETE ERROR this.errorPostMessage = true,
