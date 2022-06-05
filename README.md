@@ -1,4 +1,8 @@
-# books
+# Library App
+
+```
+https://fto-dev.github.io/vue-with-restful-api/
+```
 
 ## Project setup
 ```
