@@ -1,5 +1,14 @@
 # Library App
 
+SPA Basic Library App
+
+ - VueJS
+ - UIkit 
+
+
+All data is used from local storage. 
+
+
 ```
 https://fto-dev.github.io/vue-with-restful-api/
 ```
