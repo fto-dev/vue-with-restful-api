@@ -1,13 +1,13 @@
 <template>
     <div>
         <div >
-            <h2 v-if="info" class="uk-heading-divider uk-margin-top">Tüm Kitaplar</h2>
+            <h2 v-if="info" class="uk-heading-divider uk-margin-top">All Books</h2>
 
             <ul v-if="info" >
                 <li v-for="item in info" :key="item.title">
                     <span class="w-100"> <b class="label">Id:</b> {{ item.id }} </span>
-                    <span class="w-100"> <b class="label">Başlık:</b> {{ item.title }} </span>
-                    <span class="w-100"> <b class="label">Açıklama:</b> {{ item.description}} </span>
+                    <span class="w-100"> <b class="label">Heading:</b> {{ item.title }} </span>
+                    <span class="w-100"> <b class="label">Description:</b> {{ item.description}} </span>
                 </li>
             </ul>
             <h2 class="uk-heading-divider uk-margin-top"></h2>
@@ -16,15 +16,15 @@
         <div class="uk-container-small uk-margin-auto">
             <form class="" @submit="formSubmit">
                 <fieldset class="uk-fieldset">
-                    <legend class="uk-legend">Kitap Ekle</legend>
+                    <legend class="uk-legend">Add Book</legend>
                     <div class="uk-margin">
-                        <input class="uk-input" type="text" placeholder="Kitap Adı" v-model="bookName" >
+                        <input class="uk-input" type="text" placeholder="Book Name" v-model="bookName" >
                     </div>
                     <div class="uk-margin">
-                        <textarea class="uk-textarea" rows="5" placeholder="Kitap Açıklaması" v-model="bookDescription"></textarea>
+                        <textarea class="uk-textarea" rows="5" placeholder="Book Description" v-model="bookDescription"></textarea>
                     </div>
                 </fieldset>
-                <button class="uk-button-primary uk-padding-small" v-on:click="postBook(bookName,bookDescription)"> Ekle </button>
+                <button class="uk-button-primary uk-padding-small" v-on:click="postBook(bookName,bookDescription)"> Add </button>
             </form>
         </div>
 
@@ -33,18 +33,18 @@
         <div class="uk-container-small uk-margin-auto">
             <form class="" @submit="formSubmit">
                 <fieldset class="uk-fieldset">
-                    <legend class="uk-legend">Kitap Değiştir</legend>
+                    <legend class="uk-legend">Select and change book</legend>
                     <div class="uk-margin">
-                        <input class="uk-input" type="text" placeholder="Kitap ID Numarası" v-model="bookIdChange" >
+                        <input class="uk-input" type="text" placeholder="Book ID Number" v-model="bookIdChange" >
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" type="text" placeholder="Kitap Adı" v-model="bookNameChange" >
+                        <input class="uk-input" type="text" placeholder="Book Name" v-model="bookNameChange" >
                     </div>
                     <div class="uk-margin">
-                        <textarea class="uk-textarea" rows="5" placeholder="Kitap Açıklaması" v-model="bookDescriptionChange"></textarea>
+                        <textarea class="uk-textarea" rows="5" placeholder="Book Description" v-model="bookDescriptionChange"></textarea>
                     </div>
                 </fieldset>
-                <button class="uk-button-primary uk-padding-small" v-on:click="putBook(bookIdChange, bookNameChange, bookDescriptionChange)">  Değiştir </button>
+                <button class="uk-button-primary uk-padding-small" v-on:click="putBook(bookIdChange, bookNameChange, bookDescriptionChange)">  Change Book Info </button>
             </form>
         </div>
 
@@ -53,12 +53,12 @@
         <div class="uk-container-small uk-margin-auto">
             <form class="" @submit="formSubmit">
                 <fieldset class="uk-fieldset">
-                    <legend class="uk-legend">Kitap Sil</legend>
+                    <legend class="uk-legend">Remove Book</legend>
                     <div class="uk-margin">
-                        <input class="uk-input" type="text" placeholder="Kitap ID Numarası" v-model="bookIdDelete" >
+                        <input class="uk-input" type="text" placeholder="Book ID Number" v-model="bookIdDelete" >
                     </div>
                 </fieldset>
-                <button class="uk-button-primary uk-padding-small" v-on:click="deleteBook(bookIdDelete)"> Sil </button>
+                <button class="uk-button-primary uk-padding-small" v-on:click="deleteBook(bookIdDelete)"> Remove </button>
             </form>
         </div>
 
